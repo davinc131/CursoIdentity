@@ -34,9 +34,12 @@ namespace WebApp.Identity
           options => options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssembly) )
         );
 
-      services.AddIdentity<MyUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<MyUserDbContext>();
+      services.AddIdentity<MyUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<MyUserDbContext>().AddDefaultTokenProviders();
       services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, MyUserClaimsPrincipalFactory>();
       services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Login");
+      services.Configure<DataProtectionTokenProviderOptions>(
+          options => options.TokenLifespan = TimeSpan.FromHours(3)
+        );
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

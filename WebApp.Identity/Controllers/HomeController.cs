@@ -89,6 +89,65 @@ namespace WebApp.Identity.Controllers
     }
 
     [HttpGet]
+    public ActionResult ForgotPassword()
+    {
+      return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if(user != null)
+        {
+          var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+          var resetUrl = Url.Action("ResetPassword", "Home", new { token = token, email = model.Email}, Request.Scheme);
+          System.IO.File.WriteAllText("ResetLink.txt", resetUrl);
+          return View("Success");
+        }
+        else
+        {
+          //Fazer alguma coisa, caso o usuário não seja encontrado
+        }
+      }
+      return View();
+    }
+
+    [HttpGet]
+    public ActionResult ResetPassword()
+    {
+      return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if(user != null)
+        {
+          var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+          if (!result.Succeeded)
+          {
+            foreach (var item in result.Errors)
+            {
+              ModelState.AddModelError("Erro: ", item.Description);
+            }
+            return View();
+          }
+          return View("Success");
+        }
+      }
+      return View();
+    }
+
+    [HttpGet]
     public ActionResult Success()
     {
       return View();
