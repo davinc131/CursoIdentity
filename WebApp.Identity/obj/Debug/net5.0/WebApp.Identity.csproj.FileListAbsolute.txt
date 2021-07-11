@@ -160,3 +160,5 @@ C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\ref\We
 C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\WebApp.Identity.pdb
 C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\WebApp.Identity.genruntimeconfig.cache
 C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\WebApp.Identity.csproj.AssemblyReference.cache
+C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\Razor\Views\Home\ForgotPassword.cshtml.g.cs
+C:\Users\davin\source\repos\SOL.Identity\WebApp.Identity\obj\Debug\net5.0\Razor\Views\Home\ResetPassword.cshtml.g.cs

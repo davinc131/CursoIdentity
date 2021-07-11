@@ -34,7 +34,24 @@ namespace WebApp.Identity
           options => options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssembly) )
         );
 
-      services.AddIdentity<MyUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<MyUserDbContext>().AddDefaultTokenProviders();
+      services.AddIdentity<MyUser, IdentityRole>(
+        options => 
+        {
+          options.SignIn.RequireConfirmedEmail = true;
+
+          options.Password.RequireDigit = false;
+          options.Password.RequireNonAlphanumeric = false;
+          options.Password.RequireLowercase = false;
+          options.Password.RequireUppercase = false;
+          options.Password.RequiredLength = 6;
+
+          options.Lockout.MaxFailedAccessAttempts = 3;
+          options.Lockout.AllowedForNewUsers = true;
+        })
+        .AddEntityFrameworkStores<MyUserDbContext>()
+        .AddDefaultTokenProviders()
+        .AddPasswordValidator<ValidadorDeSenha<MyUser>>();
+
       services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, MyUserClaimsPrincipalFactory>();
       services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Login");
       services.Configure<DataProtectionTokenProviderOptions>(
