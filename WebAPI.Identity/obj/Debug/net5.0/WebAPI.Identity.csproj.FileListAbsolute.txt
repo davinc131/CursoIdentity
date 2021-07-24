@@ -1,3 +1,10 @@
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.csproj.AssemblyReference.cache
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.AssemblyInfoInputs.cache
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.AssemblyInfo.cs
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.csproj.CoreCompileInputs.cache
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\appsettings.json
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\WebAPI.Identity.exe
@@ -54,13 +61,6 @@ C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\WebApi
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\WebApi.Repository.dll
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\WebApi.Domain.pdb
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\bin\Debug\net5.0\WebApi.Repository.pdb
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.csproj.AssemblyReference.cache
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.AssemblyInfoInputs.cache
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.AssemblyInfo.cs
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.csproj.CoreCompileInputs.cache
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\WebAPI.Identity.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\staticwebassets\WebAPI.Identity.StaticWebAssets.Manifest.cache
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\staticwebassets\WebAPI.Identity.StaticWebAssets.xml
 C:\Users\davin\source\repos\SOL.Identity\WebAPI.Identity\obj\Debug\net5.0\scopedcss\bundle\WebAPI.Identity.styles.css

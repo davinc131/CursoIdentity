@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,14 +49,43 @@ namespace WebAPI.Identity.Controllers
     }
 
     // GET api/<UserController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(UserLoginDto model)
     {
-      return "value";
+      try
+      {
+        var user = await _userManager.FindByNameAsync(model.UserName);
+
+        if (user != null)
+        {
+          var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+          if (result.Succeeded)
+          {
+            var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == model.UserName.ToUpper());
+            var userToReturn = _mapper.Map<UserDto>(appUser);
+            return Ok(
+                  new
+                  {
+                    token = GeneranteJWToken(appUser).Result,
+                    user = userToReturn
+                  }
+              );
+          }
+          return Unauthorized();
+        }
+        return Unauthorized();
+      }
+      catch (Exception ex)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+      }
     }
 
     // POST api/<UserController>
-    [HttpPost]
+    [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(UserDto model)
     {
       try
@@ -67,16 +97,17 @@ namespace WebAPI.Identity.Controllers
           user = new User()
           {
             UserName = model.UserName,
-            Email = model.UserName
+            Email = model.UserName,
+            NomeCompleto = model.NomeCompleto
           };
           var result = await _userManager.CreateAsync(user, model.Password);
           if (result.Succeeded)
           {
             var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == model.UserName.ToUpper());
             var token = GeneranteJWToken(appUser).Result;
-            var confirmationEmail = Url.Action("ConfirmEmailAddress", "Home", new { token = token, email = user.Email }, Request.Scheme);
-            System.IO.File.WriteAllText("ConfirmEmailAddressLink.txt", confirmationEmail);
-            return Ok();
+            //var confirmationEmail = Url.Action("ConfirmEmailAddress", "Home", new { token = token, email = user.Email }, Request.Scheme);
+            //System.IO.File.WriteAllText("ConfirmEmailAddressLink.txt", confirmationEmail);
+            return Ok(token);
           }
         }
         return Unauthorized();

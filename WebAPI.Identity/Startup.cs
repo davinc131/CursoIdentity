@@ -20,6 +20,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
+using WebAPI.Identity.Helper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebAPI.Identity
 {
@@ -33,6 +37,7 @@ namespace WebAPI.Identity
     public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
+    [Obsolete]
     public void ConfigureServices(IServiceCollection services)
     {
       var connectionString = Configuration.GetConnectionString("DefautConnection");
@@ -56,10 +61,11 @@ namespace WebAPI.Identity
             ValidateAudience = false
           };
         });
+      
 
-      services.AddIdentity<User, Role>(options =>
+      services.AddIdentityCore<User>(options =>
       {
-        options.SignIn.RequireConfirmedEmail = true;
+        //options.SignIn.RequireConfirmedEmail = true;
 
         options.Password.RequireDigit = false;
         options.Password.RequireNonAlphanumeric = false;
@@ -70,11 +76,29 @@ namespace WebAPI.Identity
         options.Lockout.MaxFailedAccessAttempts = 3;
         options.Lockout.AllowedForNewUsers = true;
       })
+        .AddRoles<Role>()
         .AddEntityFrameworkStores<Context>()
         .AddRoleValidator<RoleValidator<Role>>()
         .AddRoleManager<RoleManager<Role>>()
         .AddSignInManager<SignInManager<User>>()
         .AddDefaultTokenProviders();
+
+      services.AddMvc(options =>
+      {
+        var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
+      }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+      var mappingConfig = new MapperConfiguration(mc =>
+      {
+        mc.AddProfile(new AutoMapperProfile());
+      });
+
+      IMapper mapper = mappingConfig.CreateMapper();
+
+      services.AddSingleton(mapper);
 
       services.AddCors();
     }
@@ -92,6 +116,7 @@ namespace WebAPI.Identity
       app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
       app.UseRouting();
 
+      app.UseAuthentication();
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
