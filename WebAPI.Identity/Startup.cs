@@ -11,9 +11,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft;
 
 using WebApi.Repository;
 using System.Reflection;
+using WebApi.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebAPI.Identity
 {
@@ -29,7 +35,7 @@ namespace WebAPI.Identity
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      var connectionString = @"Integrated Security=SSPI; Persist Security Info=False;User ID=sa;Password=sipef@adm;Initial Catalog=API_DB_Identity;Data Source=DESKTOP-6MGSSHL";
+      var connectionString = Configuration.GetConnectionString("DefautConnection");
       var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
       services.AddControllers();
       services.AddDbContext<Context>(
@@ -39,6 +45,38 @@ namespace WebAPI.Identity
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI.Identity", Version = "v1" });
       });
+
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options => {
+          options.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettins:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+          };
+        });
+
+      services.AddIdentity<User, Role>(options =>
+      {
+        options.SignIn.RequireConfirmedEmail = true;
+
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+
+        options.Lockout.MaxFailedAccessAttempts = 3;
+        options.Lockout.AllowedForNewUsers = true;
+      })
+        .AddEntityFrameworkStores<Context>()
+        .AddRoleValidator<RoleValidator<Role>>()
+        .AddRoleManager<RoleManager<Role>>()
+        .AddSignInManager<SignInManager<User>>()
+        .AddDefaultTokenProviders();
+
+      services.AddCors();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +89,7 @@ namespace WebAPI.Identity
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI.Identity v1"));
       }
 
+      app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
       app.UseRouting();
 
       app.UseAuthorization();
